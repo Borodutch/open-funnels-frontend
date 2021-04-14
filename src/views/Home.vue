@@ -1,5 +1,6 @@
 <template lang="pug">
 section
+  v-text-field(solo, prepend-inner-icon="mdi-magnify")
   v-row
     v-col(v-for="n in 3", :key="n", cols="6")
       v-card(outlined)
@@ -8,8 +9,11 @@ section
         v-card-text(style="text-align: center") 
           LineChart(:chartdata="chartdata", :options="chartOptions")
         v-card-actions
+          v-btn(text, color="primary") Export data
+            v-icon(right, dark) mdi-share
           v-spacer
-          v-btn(text) Export data
+          v-btn(icon, color="red")
+            v-icon mdi-delete
 </template>
 
 <script lang="ts">

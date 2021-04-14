@@ -37,8 +37,7 @@ import Component from "vue-class-component";
 export default class App extends Vue {
   items = [
     { title: "Dashboard", icon: "mdi-view-dashboard", to: "/" },
-    { title: "Funnels", icon: "mdi-filter", to: "/funnels" },
-    { title: "Add funnel", icon: "mdi-plus", to: "/new" }
+    { title: "Add funnel", icon: "mdi-plus", to: "/#new" }
   ];
 }
 </script>
