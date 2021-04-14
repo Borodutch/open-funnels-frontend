@@ -1,6 +1,12 @@
 <template lang="pug">
 section
-  v-text-field(solo, prepend-inner-icon="mdi-magnify")
+  v-text-field(
+    filled,
+    dense,
+    rounded,
+    prepend-inner-icon="mdi-magnify",
+    label="Find..."
+  )
   v-row
     v-col(v-for="n in 3", :key="n", cols="6")
       v-card(outlined)
