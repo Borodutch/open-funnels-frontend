@@ -4,18 +4,33 @@ import { Line } from "vue-chartjs";
 export default {
   extends: Line,
   props: {
-    chartdata: {
-      type: Object,
+    steps: {
+      type: Array,
       default: null
     },
-    options: {
-      type: Object,
+    data: {
+      type: Array,
       default: null
     }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   mounted() {
-    this.renderChart(this.chartdata, this.options);
+    const chartdata = {
+      labels: this.steps,
+      datasets: [
+        {
+          data: this.data
+        }
+      ]
+    };
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        display: false
+      }
+    };
+    this.renderChart(chartdata, chartOptions);
   }
 };
 </script>

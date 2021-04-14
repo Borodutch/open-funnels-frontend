@@ -1,4 +1,4 @@
 export interface Meta {
-  _id: string;
-  events: string[];
+  _id?: string;
+  events?: string[];
 }
