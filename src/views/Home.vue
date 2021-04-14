@@ -13,6 +13,29 @@ section
         v-card-title Funnel
         v-card-subtitle Funnel description
         v-card-text(style="text-align: center") 
+          v-row
+            v-col(cols=6)
+              v-select(:items="['iOS', 'Android', 'Web']", label="Platform")
+            v-col(cols=6)
+              v-menu(
+                ref="menu",
+                v-model="menu",
+                :close-on-content-click="false",
+                :return-value.sync="dates",
+                transition="scale-transition",
+                offset-y,
+                min-width="auto"
+              )
+                template(v-slot:activator="{ on, attrs }")
+                  v-text-field(
+                    v-model="dateRangeText",
+                    label="Dates",
+                    prepend-inner-icon="mdi-calendar",
+                    readonly,
+                    v-bind="attrs",
+                    v-on="on"
+                  )
+                v-date-picker(v-model="dates", range, no-title)
           LineChart(:chartdata="chartdata", :options="chartOptions")
         v-card-actions
           v-btn(text, color="primary") Export data
@@ -32,6 +55,8 @@ import LineChart from "@/components/LineChart.vue";
   }
 })
 export default class Home extends Vue {
+  menu = false;
+  dates = ["2021-01-01", "2021-01-01"];
   chartdata = {
     labels: ["Login", "AddTask", "DeleteTask"],
     datasets: [
@@ -47,5 +72,9 @@ export default class Home extends Vue {
       display: false
     }
   };
+
+  get dateRangeText() {
+    return this.dates.join(" ~ ");
+  }
 }
 </script>
