@@ -1,40 +1,32 @@
-<template>
-  <v-app id="__open-funnels">
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>Main</v-main>
-  </v-app>
+<template lang="pug">
+v-app
+  v-navigation-drawer(app, permanent, tag="aside")
+    v-list-item
+      v-list-item-content
+        v-list-item-title.title Funnels
+        v-list-item-subtitle alpha version
+    v-divider
+    v-list(dense, nav)
+      v-list-item(
+        v-for="item in items",
+        :key="item.title",
+        link,
+        :to="item.to"
+      )
+        v-list-item-icon
+          v-icon {{ item.icon }}
+        v-list-item-content
+          v-list-item-title {{ item.title }}
+    v-divider
+    v-list(dense, nav)
+      v-list-item(link)
+        v-list-item-icon
+          v-icon mdi-logout
+        v-list-item-content
+          v-list-item-title Logout
+  v-main(tag="main")
+    v-container(fluid)
+      router-view
 </template>
 
 <script lang="ts">
@@ -42,5 +34,11 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component
-export default class App extends Vue {}
+export default class App extends Vue {
+  items = [
+    { title: "Dashboard", icon: "mdi-view-dashboard", to: "/" },
+    { title: "Funnels", icon: "mdi-filter", to: "/funnels" },
+    { title: "Add funnel", icon: "mdi-plus", to: "/new" }
+  ];
+}
 </script>
