@@ -13,4 +13,19 @@ export class AuthService {
       .json<AccessToken>();
     return token;
   }
+
+  async checkToken(token: string): Promise<boolean> {
+    try {
+      await ky
+        .get(`${this.apiUrl}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .json();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

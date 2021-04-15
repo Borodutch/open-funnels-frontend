@@ -38,8 +38,10 @@ import Component from "vue-class-component";
 import { namespace } from "vuex-class";
 import { isDbOk } from "./helpers/api.helper";
 import Login from "@/components/Login.vue";
+import { AuthService } from "./services/auth.service";
 
 const UserStore = namespace("UserStore");
+const authService = new AuthService();
 
 @Component({
   components: {
@@ -48,11 +50,13 @@ const UserStore = namespace("UserStore");
 })
 export default class App extends Vue {
   @UserStore.State logged!: boolean;
+  @UserStore.State token!: string;
   @UserStore.Mutation login!: () => void;
   @UserStore.Mutation logout!: () => void;
 
   dbStatus = false;
   loading = true;
+  searchText = "";
 
   items = [
     { title: "Dashboard", icon: "mdi-view-dashboard", to: "/" },
@@ -60,6 +64,10 @@ export default class App extends Vue {
   ];
 
   async mounted(): Promise<void> {
+    if (!(await authService.checkToken(this.token))) {
+      this.logout();
+      alert("Token invalid or expired.");
+    }
     this.loading = true;
     this.dbStatus = await isDbOk();
     this.loading = false;

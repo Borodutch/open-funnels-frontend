@@ -3,14 +3,20 @@ section
   v-text-field(
     filled,
     dense,
+    v-model="searchText",
     rounded,
     prepend-inner-icon="mdi-magnify",
-    label="Find..."
+    label="Fast search..."
   )
   v-row
     v-col(v-if="loading", cols="6")
       v-progress-circular(indeterminate)
-    v-col(v-else, v-for="funnel in funnels", :key="funnel.name", cols="6")
+    v-col(
+      v-else,
+      v-for="funnel in filteredFunnels",
+      :key="funnel.name",
+      cols="6"
+    )
       FunnelCard(
         :id="funnel._id",
         :name="funnel.name",
@@ -33,11 +39,18 @@ import { Funnel } from "@/interfaces/Funnel.interface";
 export default class Home extends Vue {
   funnels: Funnel[] = [];
   loading = true;
+  searchText = "";
 
   async mounted(): Promise<void> {
     this.loading = true;
     this.funnels = await getFunnels();
     this.loading = false;
+  }
+
+  get filteredFunnels(): Funnel[] {
+    return this.funnels.filter(funnel =>
+      funnel.name.toLowerCase().includes(this.searchText)
+    );
   }
 }
 </script>

@@ -30,8 +30,6 @@ v-card(outlined)
             v-date-picker(v-model="dates", range, no-title)
       LineChart(:data="funnelData", :steps="steps")
   v-card-actions
-    v-btn(text, color="primary") Export data
-      v-icon(right, dark) mdi-share
     v-spacer
     v-btn(icon, color="red")
       v-icon mdi-delete
