@@ -54,3 +54,15 @@ export async function distinctPlatforms(): Promise<string[]> {
     .json<string[]>();
   return distinct;
 }
+
+export async function distinctNames(): Promise<string[]> {
+  const token: string = store.state.UserStore.token;
+  const distinct = await ky
+    .get(`${apiUrl}/event/distinct/name`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .json<string[]>();
+  return distinct;
+}
