@@ -49,7 +49,7 @@ export default class Home extends Vue {
 
   get filteredFunnels(): Funnel[] {
     return this.funnels.filter(funnel =>
-      funnel.name.toLowerCase().includes(this.searchText)
+      funnel.name.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 }
