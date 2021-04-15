@@ -37,7 +37,6 @@ export default class App extends Vue {
   async mounted(): Promise<void> {
     if (!(await authService.checkToken(this.token))) {
       this.logout();
-      alert("Token invalid or expired.");
     }
   }
 }

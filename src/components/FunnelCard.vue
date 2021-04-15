@@ -10,6 +10,7 @@ v-card(outlined)
           v-select(
             :items="listPlatforms",
             label="Platform",
+            @change="updateMeta",
             v-model="currentPlatform"
           )
         v-col(cols=6)
@@ -24,18 +25,18 @@ v-card(outlined)
           )
             template(v-slot:activator="{ on, attrs }")
               v-text-field(
-                v-model="dateRangeText",
+                v-model="inputDate",
                 label="Date range",
                 prepend-inner-icon="mdi-calendar",
                 readonly,
                 v-bind="attrs",
                 v-on="on"
               )
-            v-date-picker(v-model="dates", range, no-title)
+            v-date-picker(v-model="dates", range, no-title, @change="saveDate")
       LineChart(:data="funnelData", :steps="steps")
   v-card-actions
     v-spacer
-    v-btn(icon, color="red")
+    v-btn(icon, color="red", :loading="loading")
       v-icon mdi-delete
 </template>
 
@@ -43,6 +44,7 @@ v-card(outlined)
 import { Vue, Component, Prop } from "vue-property-decorator";
 import LineChart from "@/components/LineChart.vue";
 import { distinctPlatforms, getMeta } from "@/services/api.service";
+import moment from "moment";
 
 @Component({
   components: {
@@ -54,20 +56,28 @@ export default class FunnelCard extends Vue {
   @Prop() name!: string;
   @Prop() description!: string;
   @Prop() steps!: string[];
-  listPlatforms: string[] = [];
-  currentPlatform = "";
 
   loading = true;
+  listPlatforms: string[] = [];
+  currentPlatform = "";
   funnelData: number[] = [];
-
   menu = false;
-  dates = ["2021-01-01", "2021-01-01"];
+  dates: string[] = ["", ""];
 
   async mounted(): Promise<void> {
+    const startOfWeek = moment().startOf("week");
+    const endOfWeek = moment().endOf("week");
+    this.dates = [
+      startOfWeek.format("YYYY-MM-DD"),
+      endOfWeek.format("YYYY-MM-DD")
+    ];
     this.loading = true;
-    this.funnelData = await getMeta(this.id);
     this.listPlatforms = await distinctPlatforms();
     this.currentPlatform = this.listPlatforms[0];
+    this.funnelData = await getMeta(this.id, this.currentPlatform, [
+      startOfWeek.format("x"),
+      endOfWeek.format("x")
+    ]);
     this.loading = false;
   }
 
@@ -77,6 +87,28 @@ export default class FunnelCard extends Vue {
 
   get funnelDescription(): string {
     return this.description;
+  }
+
+  async updateMeta(): Promise<void> {
+    this.loading = true;
+    const startDate = moment(this.dates[0]).format("x");
+    const endDate = moment(this.dates[1]).format("x");
+    this.funnelData = await getMeta(this.id, this.currentPlatform, [
+      startDate,
+      endDate
+    ]);
+    this.loading = false;
+  }
+
+  saveDate(date: string[]): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this.$refs.menu as any).save(date);
+    this.menu = false;
+    this.updateMeta();
+  }
+
+  get inputDate(): string {
+    return this.dates.join(" — ");
   }
 }
 </script>

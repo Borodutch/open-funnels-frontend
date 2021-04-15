@@ -12,11 +12,7 @@ v-navigation-drawer(app, permanent, tag="aside")
         v-icon mdi-view-dashboard
       v-list-item-content
         v-list-item-title Dashboard
-    v-list-item(link)
-      v-list-item-icon
-        v-icon mdi-plus
-      v-list-item-content
-        v-list-item-title Add funnel
+    AddFunnel
   v-divider
   v-list(dense, nav)
     v-list-item(link, @click="logout")
@@ -31,10 +27,15 @@ import { isDbOk } from "@/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { namespace } from "vuex-class";
+import AddFunnel from "@/components/AddFunnel.vue";
 
 const UserStore = namespace("UserStore");
 
-@Component
+@Component({
+  components: {
+    AddFunnel
+  }
+})
 export default class Aside extends Vue {
   @UserStore.Mutation logout!: () => void;
 
