@@ -1,7 +1,6 @@
 import ky from 'ky';
 import { AccessToken } from '@/interfaces/AccessToken.interface';
 import { Funnel } from '@/interfaces/Funnel.interface';
-import { Meta } from '@/interfaces/Meta.interface';
 
 const apiUrl = process.env.VUE_APP_API_URL;
 

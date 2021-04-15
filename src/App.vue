@@ -1,5 +1,7 @@
 <template lang="pug">
-v-app
+v-app(v-if="!logged")
+  Login
+v-app(v-else)
   v-navigation-drawer(app, permanent, tag="aside")
     v-list-item
       v-list-item-content
@@ -20,7 +22,7 @@ v-app
           v-list-item-title {{ item.title }}
     v-divider
     v-list(dense, nav)
-      v-list-item(link)
+      v-list-item(link, @click="logout")
         v-list-item-icon
           v-icon mdi-logout
         v-list-item-content
@@ -33,10 +35,22 @@ v-app
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { namespace } from "vuex-class";
 import { isDbOk } from "./helpers/api.helper";
+import Login from "@/components/Login.vue";
 
-@Component
+const UserStore = namespace("UserStore");
+
+@Component({
+  components: {
+    Login
+  }
+})
 export default class App extends Vue {
+  @UserStore.State logged!: boolean;
+  @UserStore.Mutation login!: () => void;
+  @UserStore.Mutation logout!: () => void;
+
   dbStatus = false;
   loading = true;
 
