@@ -38,7 +38,7 @@ v-card(outlined)
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import LineChart from "@/components/LineChart.vue";
-import { distinctPlatforms, getMeta } from "@/helpers/api.helper";
+import { distinctPlatforms, getMeta } from "@/services/api.service";
 
 @Component({
   components: {

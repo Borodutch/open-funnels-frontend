@@ -28,7 +28,7 @@ section
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import FunnelCard from "@/components/FunnelCard.vue";
-import { getFunnels } from "@/helpers/api.helper";
+import { getFunnels } from "@/services/api.service";
 import { Funnel } from "@/interfaces/Funnel.interface";
 
 @Component({

@@ -36,7 +36,7 @@ v-app(v-else)
 import Vue from "vue";
 import Component from "vue-class-component";
 import { namespace } from "vuex-class";
-import { isDbOk } from "./helpers/api.helper";
+import { isDbOk } from "./services/api.service";
 import Login from "@/components/Login.vue";
 import { AuthService } from "./services/auth.service";
 
