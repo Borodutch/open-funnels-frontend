@@ -7,7 +7,11 @@ v-card(outlined)
     section(v-else)
       v-row
         v-col(cols=6)
-          v-select(:items="listPlatforms", label="Platform")
+          v-select(
+            :items="listPlatforms",
+            label="Platform",
+            v-model="currentPlatform"
+          )
         v-col(cols=6)
           v-menu(
             ref="menu",
@@ -51,6 +55,7 @@ export default class FunnelCard extends Vue {
   @Prop() description!: string;
   @Prop() steps!: string[];
   listPlatforms: string[] = [];
+  currentPlatform = "";
 
   loading = true;
   funnelData: number[] = [];
@@ -62,6 +67,7 @@ export default class FunnelCard extends Vue {
     this.loading = true;
     this.funnelData = await getMeta(this.id);
     this.listPlatforms = await distinctPlatforms();
+    this.currentPlatform = this.listPlatforms[0];
     this.loading = false;
   }
 
