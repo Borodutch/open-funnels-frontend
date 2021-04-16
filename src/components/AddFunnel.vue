@@ -46,6 +46,7 @@ export default class AddFunnel extends Vue {
   namesList: string[] = [];
   loading = false;
 
+  atts = "";
   funnelName = "";
   funnelDescription = "";
   funnelSteps: { name: string }[] = [];

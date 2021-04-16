@@ -11,18 +11,20 @@ section
   v-row
     v-col(v-if="loading", cols="6")
       v-progress-circular(indeterminate)
-    v-col(
-      v-else,
-      v-for="funnel in filteredFunnels",
-      :key="funnel.name",
-      cols="6"
-    )
-      FunnelCard(
-        :id="funnel._id",
-        :name="funnel.name",
-        :description="funnel.description",
-        :steps="funnel.steps"
+    template(v-else)
+      v-col(v-if="funnels.length === 0") No funnels yet :(
+      v-col(
+        v-else,
+        v-for="funnel in filteredFunnels",
+        :key="funnel.name",
+        cols="6"
       )
+        FunnelCard(
+          :id="funnel._id",
+          :name="funnel.name",
+          :description="funnel.description",
+          :steps="funnel.steps"
+        )
 </template>
 
 <script lang="ts">

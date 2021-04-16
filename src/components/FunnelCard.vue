@@ -36,14 +36,18 @@ v-card(outlined)
       LineChart(:data="funnelData", :steps="steps")
   v-card-actions
     v-spacer
-    v-btn(icon, color="red", :loading="loading")
+    v-btn(icon, color="red", :loading="loading", @click="removeFunnel")
       v-icon mdi-delete
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import LineChart from "@/components/LineChart.vue";
-import { distinctPlatforms, getMeta } from "@/services/api.service";
+import {
+  deleteFunnel,
+  distinctPlatforms,
+  getMeta
+} from "@/services/api.service";
 import moment from "moment";
 
 @Component({
@@ -109,6 +113,11 @@ export default class FunnelCard extends Vue {
 
   get inputDate(): string {
     return this.dates.join(" — ");
+  }
+
+  async removeFunnel(): Promise<void> {
+    await deleteFunnel(this.id);
+    window.location.reload();
   }
 }
 </script>
