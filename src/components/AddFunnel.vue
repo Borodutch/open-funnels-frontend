@@ -6,26 +6,37 @@ v-dialog(v-model="dialog", width="400")
         v-icon mdi-plus
       v-list-item-content
         v-list-item-title Add funnel
-  v-progress-circular(v-if="loading")
-  v-card(v-else)
+  v-card
     v-toolbar(flat)
       v-btn(icon, @click="dialog = false")
         v-icon mdi-close
       v-toolbar-title Add funnel
-      v-spacer
-      v-toolbar-items
-        v-btn(text, color="green") Add step
     .px-5.pb-5
-      v-text-field(label="Funnel name")
-      v-text-field(label="Funnel description")
-      v-select(:items="namesList", label="Step 1")
-    v-card-actions
+      v-progress-linear(v-if="loading", indeterminate)
+      template(v-else)
+        v-text-field(label="Name", v-model="funnelName")
+        v-text-field(label="Description", v-model="funnelDescription")
+        v-select(
+          v-for="step in funnelSteps",
+          :items="namesList",
+          v-model="step.name"
+        )
+    v-card-actions(v-if="!loading")
       v-spacer
-      v-btn(text, color="primary") save
+      v-btn(
+        icon,
+        color="red",
+        @click="removeStep",
+        :disabled="funnelSteps.length === 1"
+      )
+        v-icon mdi-minus
+      v-btn(icon, color="green", @click="addStep")
+        v-icon mdi-plus
+      v-btn(text, color="primary", :disabled="!funnelName", @click="newFunnel") Save
 </template>
 
 <script lang="ts">
-import { distinctNames } from "@/services/api.service";
+import { addFunnel, distinctNames } from "@/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -35,10 +46,33 @@ export default class AddFunnel extends Vue {
   namesList: string[] = [];
   loading = false;
 
+  funnelName = "";
+  funnelDescription = "";
+  funnelSteps: { name: string }[] = [];
+
   async mounted(): Promise<void> {
     this.loading = true;
     this.namesList = await distinctNames();
+    this.funnelSteps.push({ name: this.namesList[0] });
     this.loading = false;
+  }
+
+  addStep(): void {
+    this.funnelSteps.push({ name: this.namesList[0] });
+  }
+
+  removeStep(): void {
+    if (this.funnelSteps.length > 1) this.funnelSteps.pop();
+  }
+
+  async newFunnel(): Promise<void> {
+    this.loading = true;
+    let rawSteps: string[] = [];
+    this.funnelSteps.map(step => {
+      rawSteps.push(step.name);
+    });
+    await addFunnel(this.funnelName, this.funnelDescription, rawSteps);
+    window.location.reload();
   }
 }
 </script>

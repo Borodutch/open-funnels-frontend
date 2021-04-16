@@ -4,6 +4,24 @@ import store from '@/store';
 
 const apiUrl = process.env.VUE_APP_API_URL;
 
+export async function addFunnel(
+  name: string,
+  description: string,
+  steps: string[]
+): Promise<void> {
+  const token: string = store.state.UserStore.token;
+  await ky.post(`${apiUrl}/funnel`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    json: {
+      name: name,
+      description: description,
+      steps: steps,
+    },
+  });
+}
+
 export async function getFunnels(): Promise<Funnel[]> {
   const token: string = store.state.UserStore.token;
   const funnels = await ky
