@@ -19,7 +19,8 @@ v-dialog(v-model="dialog", width="400")
         v-select(
           v-for="step in funnelSteps",
           :items="namesList",
-          v-model="step.name"
+          v-model="step.name",
+          :key="step.name"
         )
     v-card-actions(v-if="!loading")
       v-spacer
