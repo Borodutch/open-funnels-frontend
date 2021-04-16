@@ -26,15 +26,22 @@ v-dialog(v-model="dialog", width="400")
     v-card-actions(v-if="!loading")
       v-btn(
         icon,
+        large,
         color="red",
         @click="removeStep",
         :disabled="funnelSteps.length === 1"
       )
         v-icon mdi-minus
-      v-btn(icon, color="green", @click="addStep")
+      v-btn(icon, color="green", @click="addStep", large)
         v-icon mdi-plus
       v-spacer
-      v-btn(text, color="primary", :disabled="!funnelName", @click="newFunnel") Save
+      v-btn(
+        text,
+        color="primary",
+        :disabled="!funnelName",
+        @click="newFunnel",
+        large
+      ) Save
 </template>
 
 <script lang="ts">
