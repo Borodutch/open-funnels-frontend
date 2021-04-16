@@ -2,19 +2,32 @@
 v-main(tag="main")
   v-container
     .d-flex.justify-center.pt-10
-      v-card(style="min-width: 300px", outlined)
-        v-card-title Open funnels
+      v-card(style="min-width: 300px", flat)
+        v-card-title Open funnels dashboard
+        v-card-subtitle Admin account required
         v-card-text 
-          v-text-field(outlined, v-model="inputLogin", label="Username")
+          v-text-field.pt-5(
+            outlined,
+            v-model="inputLogin",
+            label="Username",
+            prepend-inner-icon="mdi-account"
+          )
           v-text-field(
             outlined,
             v-model="inputPassword",
             type="password",
-            label="Password"
+            label="Password",
+            prepend-inner-icon="mdi-lock"
           )
         v-card-actions
-          v-spacer
-          v-btn(text, color="primary", @click="login") Login
+          v-btn(
+            large,
+            depressed,
+            block,
+            color="primary",
+            @click="login",
+            :disabled="!inputPassword || !inputLogin"
+          ) Login
 </template>
 
 <script lang="ts">
