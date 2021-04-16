@@ -3,7 +3,12 @@ v-card(outlined)
   v-toolbar(color="blue-grey lighten-5", dense, flat)
     v-toolbar-title {{ funnelName }}
     v-spacer
-    v-btn(icon, color="red", :loading="loading", @click="removeFunnel")
+    v-btn(
+      icon,
+      color="red lighten-3",
+      :loading="loading",
+      @click="removeFunnel"
+    )
       v-icon mdi-delete
   v-card-subtitle {{ funnelDescription }}
   v-card-text(style="text-align: center") 
@@ -16,6 +21,7 @@ v-card(outlined)
             :items="listPlatforms",
             label="Platform",
             @change="updateMeta",
+            prepend-inner-icon="mdi-cellphone-link",
             v-model="currentPlatform"
           )
         v-col(cols=6)

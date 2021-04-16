@@ -3,9 +3,9 @@ v-dialog(v-model="dialog", width="400")
   template(v-slot:activator="{ on, attrs }")
     v-list-item(link, v-bind="atts", v-on="on")
       v-list-item-icon
-        v-icon mdi-plus
+        v-icon mdi-filter-plus
       v-list-item-content
-        v-list-item-title Add funnel
+        v-list-item-title New funnel
   v-card
     v-toolbar(flat)
       v-btn(icon, @click="dialog = false")
@@ -22,7 +22,8 @@ v-dialog(v-model="dialog", width="400")
           v-for="step in funnelSteps",
           :items="namesList",
           v-model="step.name",
-          :key="step.name"
+          :key="step.name",
+          prepend-inner-icon="mdi-filter"
         )
     v-card-actions(v-if="!loading")
       v-btn(
