@@ -16,6 +16,7 @@ v-dialog(v-model="dialog", width="400")
       template(v-else)
         v-text-field(filled, label="Name", v-model="funnelName")
         v-text-field(filled, label="Description", v-model="funnelDescription")
+        v-subheader Steps
         v-select(
           outlined,
           v-for="step in funnelSteps",
