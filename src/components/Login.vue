@@ -2,9 +2,9 @@
 v-main(tag="main")
   v-container
     .d-flex.justify-center.pt-10
-      v-card(style="min-width: 300px", flat)
+      v-card(style="min-width: 300px", flat, dark, color="blue-grey")
         v-card-title Open funnels dashboard
-        v-card-subtitle Admin account required
+        v-card-subtitle(v-if="error") {{ error }}
         v-card-text 
           v-text-field.pt-5(
             outlined,
@@ -24,7 +24,6 @@ v-main(tag="main")
             large,
             depressed,
             block,
-            color="primary",
             @click="login",
             :disabled="!inputPassword || !inputLogin"
           ) Login
@@ -45,16 +44,21 @@ export default class Login extends Vue {
 
   inputLogin = "";
   inputPassword = "";
+  loading = false;
+  error = "";
 
   async login(): Promise<void> {
     try {
+      this.loading = true;
       const token = await authService.login({
         login: this.inputLogin,
         password: this.inputPassword
       });
       this.setToken(token.access_token);
     } catch (error) {
-      alert(error);
+      this.error = error;
+    } finally {
+      this.loading = false;
     }
   }
 }

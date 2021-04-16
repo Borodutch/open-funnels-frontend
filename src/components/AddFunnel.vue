@@ -14,16 +14,16 @@ v-dialog(v-model="dialog", width="400")
     .px-5.pb-5
       v-progress-linear(v-if="loading", indeterminate)
       template(v-else)
-        v-text-field(label="Name", v-model="funnelName")
-        v-text-field(label="Description", v-model="funnelDescription")
+        v-text-field(filled, label="Name", v-model="funnelName")
+        v-text-field(filled, label="Description", v-model="funnelDescription")
         v-select(
+          outlined,
           v-for="step in funnelSteps",
           :items="namesList",
           v-model="step.name",
           :key="step.name"
         )
     v-card-actions(v-if="!loading")
-      v-spacer
       v-btn(
         icon,
         color="red",
@@ -33,6 +33,7 @@ v-dialog(v-model="dialog", width="400")
         v-icon mdi-minus
       v-btn(icon, color="green", @click="addStep")
         v-icon mdi-plus
+      v-spacer
       v-btn(text, color="primary", :disabled="!funnelName", @click="newFunnel") Save
 </template>
 

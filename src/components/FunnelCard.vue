@@ -1,13 +1,18 @@
 <template lang="pug">
 v-card(outlined)
-  v-card-title {{ funnelName }}
+  v-toolbar(color="blue-grey lighten-5", dense, flat)
+    v-toolbar-title {{ funnelName }}
+    v-spacer
+    v-btn(icon, color="red", :loading="loading", @click="removeFunnel")
+      v-icon mdi-delete
   v-card-subtitle {{ funnelDescription }}
   v-card-text(style="text-align: center") 
-    v-progress-circular(v-if="loading", indeterminate)
+    v-skeleton-loader(v-if="loading", type="card-heading, image")
     section(v-else)
       v-row
         v-col(cols=6)
           v-select(
+            filled,
             :items="listPlatforms",
             label="Platform",
             @change="updateMeta",
@@ -25,6 +30,7 @@ v-card(outlined)
           )
             template(v-slot:activator="{ on, attrs }")
               v-text-field(
+                filled,
                 v-model="inputDate",
                 label="Date range",
                 prepend-inner-icon="mdi-calendar",
@@ -34,10 +40,6 @@ v-card(outlined)
               )
             v-date-picker(v-model="dates", range, no-title, @change="saveDate")
       LineChart(:data="funnelData", :steps="steps")
-  v-card-actions
-    v-spacer
-    v-btn(icon, color="red", :loading="loading", @click="removeFunnel")
-      v-icon mdi-delete
 </template>
 
 <script lang="ts">
@@ -116,6 +118,7 @@ export default class FunnelCard extends Vue {
   }
 
   async removeFunnel(): Promise<void> {
+    this.loading = true;
     await deleteFunnel(this.id);
     window.location.reload();
   }

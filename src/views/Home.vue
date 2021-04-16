@@ -1,8 +1,8 @@
 <template lang="pug">
 section
   v-text-field(
-    filled,
     dense,
+    filled,
     v-model="searchText",
     rounded,
     prepend-inner-icon="mdi-magnify",
