@@ -36,12 +36,15 @@ import { Vue, Component } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 const UserStore = namespace("UserStore");
+const SnackbarStore = namespace("SnackbarStore");
+
 const authService = new AuthService();
 
 @Component
 export default class Login extends Vue {
   @UserStore.Mutation setToken!: (token: string) => Promise<void>;
   @UserStore.State token!: string;
+  @SnackbarStore.Mutation showSnackbar!: (text: string) => void;
 
   inputLogin = "";
   inputPassword = "";
@@ -58,7 +61,7 @@ export default class Login extends Vue {
       this.setToken(token.access_token);
       window.location.reload();
     } catch (error) {
-      this.error = error;
+      this.showSnackbar(error);
     } finally {
       this.loading = false;
     }

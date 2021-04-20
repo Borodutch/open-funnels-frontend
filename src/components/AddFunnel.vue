@@ -50,9 +50,14 @@ v-dialog(v-model="dialog", width="400")
 import { addFunnel, distinctNames } from "@/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { namespace } from "vuex-class";
+
+const SnackbarStore = namespace("SnackbarStore");
 
 @Component
 export default class AddFunnel extends Vue {
+  @SnackbarStore.Mutation showSnackbar!: (text: string) => void;
+
   dialog = false;
   namesList: string[] = [];
   loading = false;
@@ -87,7 +92,7 @@ export default class AddFunnel extends Vue {
       await addFunnel(this.funnelName, this.funnelDescription, rawSteps);
       window.location.reload();
     } catch (error) {
-      alert(error);
+      this.showSnackbar(error);
       this.loading = false;
     }
   }

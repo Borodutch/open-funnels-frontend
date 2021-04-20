@@ -57,6 +57,9 @@ import {
   getMeta
 } from "@/services/api.service";
 import moment from "moment";
+import { namespace } from "vuex-class";
+
+const SnackbarStore = namespace("SnackbarStore");
 
 @Component({
   components: {
@@ -64,6 +67,7 @@ import moment from "moment";
   }
 })
 export default class FunnelCard extends Vue {
+  @SnackbarStore.Mutation showSnackbar!: (text: string) => void;
   @Prop() id!: string;
   @Prop() name!: string;
   @Prop() description!: string;
@@ -111,7 +115,7 @@ export default class FunnelCard extends Vue {
         endDate
       ]);
     } catch (error) {
-      alert(error);
+      this.showSnackbar(error);
     } finally {
       this.loading = false;
     }
@@ -134,7 +138,7 @@ export default class FunnelCard extends Vue {
       await deleteFunnel(this.id);
       window.location.reload();
     } catch (error) {
-      alert(error);
+      this.showSnackbar(error);
       this.loading = false;
     }
   }

@@ -1,5 +1,6 @@
 <template lang="pug">
 v-app
+  Snackbar
   section(v-if="!logged")
     Login
   section(v-else)
@@ -13,9 +14,11 @@ v-app
 import Vue from "vue";
 import Component from "vue-class-component";
 import { namespace } from "vuex-class";
+import { AuthService } from "./services/auth.service";
+
+import Snackbar from "@/components/Snackbar.vue";
 import Login from "@/components/Login.vue";
 import Aside from "@/components/Aside.vue";
-import { AuthService } from "./services/auth.service";
 
 const UserStore = namespace("UserStore");
 const authService = new AuthService();
@@ -23,7 +26,8 @@ const authService = new AuthService();
 @Component({
   components: {
     Login,
-    Aside
+    Aside,
+    Snackbar
   }
 })
 export default class App extends Vue {
