@@ -105,11 +105,16 @@ export default class FunnelCard extends Vue {
     this.loading = true;
     const startDate = moment(this.dates[0]).format("x");
     const endDate = moment(this.dates[1]).format("x");
-    this.funnelData = await getMeta(this.id, this.currentPlatform, [
-      startDate,
-      endDate
-    ]);
-    this.loading = false;
+    try {
+      this.funnelData = await getMeta(this.id, this.currentPlatform, [
+        startDate,
+        endDate
+      ]);
+    } catch (error) {
+      alert(error);
+    } finally {
+      this.loading = false;
+    }
   }
 
   saveDate(date: string[]): void {
@@ -125,8 +130,13 @@ export default class FunnelCard extends Vue {
 
   async removeFunnel(): Promise<void> {
     this.loading = true;
-    await deleteFunnel(this.id);
-    window.location.reload();
+    try {
+      await deleteFunnel(this.id);
+      window.location.reload();
+    } catch (error) {
+      alert(error);
+      this.loading = false;
+    }
   }
 }
 </script>

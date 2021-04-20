@@ -83,8 +83,13 @@ export default class AddFunnel extends Vue {
     this.funnelSteps.map(step => {
       rawSteps.push(step.name);
     });
-    await addFunnel(this.funnelName, this.funnelDescription, rawSteps);
-    window.location.reload();
+    try {
+      await addFunnel(this.funnelName, this.funnelDescription, rawSteps);
+      window.location.reload();
+    } catch (error) {
+      alert(error);
+      this.loading = false;
+    }
   }
 }
 </script>

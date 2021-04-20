@@ -35,7 +35,11 @@ export default class App extends Vue {
   searchText = "";
 
   async mounted(): Promise<void> {
-    if (!(await authService.checkToken(this.token))) {
+    try {
+      if (!(await authService.checkToken(this.token))) {
+        this.logout();
+      }
+    } catch (error) {
       this.logout();
     }
   }

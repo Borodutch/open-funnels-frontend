@@ -5,7 +5,8 @@ v-main(tag="main")
       v-card(style="min-width: 300px", flat, dark, color="blue-grey")
         v-card-title Open funnels dashboard
         v-card-subtitle(v-if="error") {{ error }}
-        v-card-text 
+        v-progress-linear(v-if="loading", indeterminate)
+        v-card-text(v-else)
           v-text-field.pt-5(
             outlined,
             v-model="inputLogin",
@@ -55,6 +56,7 @@ export default class Login extends Vue {
         password: this.inputPassword
       });
       this.setToken(token.access_token);
+      window.location.reload();
     } catch (error) {
       this.error = error;
     } finally {
