@@ -1,5 +1,5 @@
 <template lang="pug">
-v-dialog(v-model="dialog", width="400", persistent)
+v-dialog(v-model="dialog", max-width="600", persistent, scrollable)
   template(v-slot:activator="{ on, attrs }")
     v-list-item(link, v-bind="atts", v-on="on")
       v-list-item-icon
@@ -11,18 +11,18 @@ v-dialog(v-model="dialog", width="400", persistent)
       v-btn(icon, @click="closePopup()")
         v-icon mdi-close
       v-toolbar-title Add funnel
-    .px-5.pb-5
+    v-card-text.add-funnel-content
       v-progress-linear(v-if="loading", indeterminate)
       template(v-else)
         v-text-field(filled, label="Name", v-model="funnelName")
         v-text-field(filled, label="Description", v-model="funnelDescription")
-        v-subheader Steps
-        v-select(
+        v-autocomplete(
           outlined,
-          v-for="step in funnelSteps",
+          :label="`Step ${index + 1}`",
+          v-for="(step, index) in funnelSteps",
           :items="namesList",
           v-model="step.name",
-          :key="step.name",
+          :key="index",
           prepend-inner-icon="mdi-filter"
         )
     v-card-actions(v-if="!loading")
@@ -89,6 +89,8 @@ export default class AddFunnel extends Vue {
 
   addStep(): void {
     this.funnelSteps.push({ name: this.namesList[0] });
+    const content = document.getElementsByClassName("add-funnel-content")[0];
+    content.scrollTop = content.scrollHeight;
   }
 
   removeStep(): void {
