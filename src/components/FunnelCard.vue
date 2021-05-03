@@ -133,13 +133,22 @@ export default class FunnelCard extends Vue {
   }
 
   async removeFunnel(): Promise<void> {
-    this.loading = true;
-    try {
-      await deleteFunnel(this.id);
-      window.location.reload();
-    } catch (error) {
-      this.showSnackbar(error);
-      this.loading = false;
+    const confirmed = await this.$confirm(
+      "Do you really want to delete this funnel?",
+      {
+        title: "Delete funnel",
+        buttonTrueColor: "red"
+      }
+    );
+    if (confirmed) {
+      this.loading = true;
+      try {
+        await deleteFunnel(this.id);
+        window.location.reload();
+      } catch (error) {
+        this.showSnackbar(error);
+        this.loading = false;
+      }
     }
   }
 }

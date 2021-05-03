@@ -1,5 +1,5 @@
 <template lang="pug">
-v-dialog(v-model="dialog", width="400")
+v-dialog(v-model="dialog", width="400", persistent)
   template(v-slot:activator="{ on, attrs }")
     v-list-item(link, v-bind="atts", v-on="on")
       v-list-item-icon
@@ -8,7 +8,7 @@ v-dialog(v-model="dialog", width="400")
         v-list-item-title New funnel
   v-card
     v-toolbar(flat)
-      v-btn(icon, @click="dialog = false")
+      v-btn(icon, @click="closePopup()")
         v-icon mdi-close
       v-toolbar-title Add funnel
     .px-5.pb-5
@@ -72,6 +72,19 @@ export default class AddFunnel extends Vue {
     this.namesList = await distinctNames();
     this.funnelSteps.push({ name: this.namesList[0] });
     this.loading = false;
+  }
+
+  async closePopup(): Promise<void> {
+    const confirmed = await this.$confirm(
+      "Do you really want to cancel creation?",
+      {
+        title: "Close popup",
+        buttonTrueColor: "red"
+      }
+    );
+    if (confirmed) {
+      this.dialog = false;
+    }
   }
 
   addStep(): void {
