@@ -15,7 +15,7 @@ v-navigation-drawer(app, permanent, dark, tag="aside", color="blue-grey")
     AddFunnel
   v-divider
   v-list(dense, nav)
-    v-list-item(link, @click="logout")
+    v-list-item(link, @click="logoutUser")
       v-list-item-icon
         v-icon mdi-logout
       v-list-item-content
@@ -46,6 +46,11 @@ export default class Aside extends Vue {
     this.loading = true;
     this.dbStatus = await isDbOk();
     this.loading = false;
+  }
+
+  logoutUser(): void {
+    this.logout();
+    this.$router.push("login");
   }
 }
 </script>

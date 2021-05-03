@@ -1,33 +1,31 @@
 <template lang="pug">
-v-main(tag="main")
-  v-container
-    .d-flex.justify-center.pt-10
-      v-card(style="min-width: 300px", flat, dark, color="blue-grey")
-        v-card-title Open funnels dashboard
-        v-card-subtitle(v-if="error") {{ error }}
-        v-progress-linear(v-if="loading", indeterminate)
-        v-card-text(v-else)
-          v-text-field.pt-5(
-            outlined,
-            v-model="inputLogin",
-            label="Username",
-            prepend-inner-icon="mdi-account"
-          )
-          v-text-field(
-            outlined,
-            v-model="inputPassword",
-            type="password",
-            label="Password",
-            prepend-inner-icon="mdi-lock"
-          )
-        v-card-actions
-          v-btn(
-            large,
-            depressed,
-            block,
-            @click="login",
-            :disabled="!inputPassword || !inputLogin"
-          ) Login
+.d-flex.justify-center.pt-10
+  v-card(style="min-width: 300px", flat, dark, color="blue-grey")
+    v-card-title Open funnels dashboard
+    v-card-subtitle(v-if="error") {{ error }}
+    v-progress-linear(v-if="loading", indeterminate)
+    v-card-text(v-else)
+      v-text-field.pt-5(
+        outlined,
+        v-model="inputLogin",
+        label="Username",
+        prepend-inner-icon="mdi-account"
+      )
+      v-text-field(
+        outlined,
+        v-model="inputPassword",
+        type="password",
+        label="Password",
+        prepend-inner-icon="mdi-lock"
+      )
+    v-card-actions
+      v-btn(
+        large,
+        depressed,
+        block,
+        @click="login",
+        :disabled="!inputPassword || !inputLogin"
+      ) Login
 </template>
 
 <script lang="ts">
@@ -59,7 +57,7 @@ export default class Login extends Vue {
         password: this.inputPassword
       });
       this.setToken(token.access_token);
-      window.location.reload();
+      this.$router.push("/");
     } catch (error) {
       this.showSnackbar(error);
     } finally {

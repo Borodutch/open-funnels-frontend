@@ -1,10 +1,8 @@
 <template lang="pug">
 v-app
   Snackbar
-  section(v-if="!logged")
-    Login
-  section(v-else)
-    Aside
+  section
+    Aside(v-if="logged")
     v-main(tag="main")
       v-container(fluid)
         router-view
@@ -17,7 +15,6 @@ import { namespace } from "vuex-class";
 import { AuthService } from "./services/auth.service";
 
 import Snackbar from "@/components/Snackbar.vue";
-import Login from "@/components/Login.vue";
 import Aside from "@/components/Aside.vue";
 
 const UserStore = namespace("UserStore");
@@ -25,7 +22,6 @@ const authService = new AuthService();
 
 @Component({
   components: {
-    Login,
     Aside,
     Snackbar
   }
