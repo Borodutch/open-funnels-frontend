@@ -35,17 +35,15 @@ v-dialog(v-model="dialog", max-width="600", persistent, scrollable)
               :key="index",
               prepend-inner-icon="mdi-filter"
             )
+            v-btn.ml-2.mt-1(
+              icon,
+              color="red",
+              @click="popStep(index)",
+              :disabled="funnelSteps.length === 1"
+            )
+              v-icon mdi-close
     v-card-actions(v-if="!loading")
-      v-btn(
-        icon,
-        large,
-        color="red",
-        @click="removeStep",
-        :disabled="funnelSteps.length === 1"
-      )
-        v-icon mdi-minus
-      v-btn(icon, color="green", @click="addStep", large)
-        v-icon mdi-plus
+      v-btn(color="green", @click="addStep", large, text) Add step
       v-spacer
       v-btn(
         text,
@@ -110,6 +108,10 @@ export default class AddFunnel extends Vue {
 
   removeStep(): void {
     if (this.funnelSteps.length > 1) this.funnelSteps.pop();
+  }
+
+  popStep(index: number): void {
+    this.funnelSteps.splice(index, 1);
   }
 
   async newFunnel(): Promise<void> {
