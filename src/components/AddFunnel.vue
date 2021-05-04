@@ -14,17 +14,27 @@ v-dialog(v-model="dialog", max-width="600", persistent, scrollable)
     v-card-text.add-funnel-content
       v-progress-linear(v-if="loading", indeterminate)
       template(v-else)
-        v-text-field(filled, label="Name", v-model="funnelName")
-        v-text-field(filled, label="Description", v-model="funnelDescription")
-        v-autocomplete(
-          outlined,
-          :label="`Step ${index + 1}`",
-          v-for="(step, index) in funnelSteps",
-          :items="namesList",
-          v-model="step.name",
-          :key="index",
-          prepend-inner-icon="mdi-filter"
-        )
+        v-row
+          v-col(cols=6)
+            v-text-field(filled, label="Title", v-model="funnelName")
+          v-col(cols=6)
+            v-text-field(
+              filled,
+              label="Description",
+              v-model="funnelDescription"
+            )
+        draggable(v-model="funnelSteps")
+          .d-flex.flex-row.align-start(v-for="(step, index) in funnelSteps")
+            v-icon.pt-2.pr-2(style="cursor: row-resize") mdi-menu
+            v-autocomplete(
+              dense,
+              outlined,
+              :label="`Step ${index + 1}`",
+              :items="namesList",
+              v-model="step.name",
+              :key="index",
+              prepend-inner-icon="mdi-filter"
+            )
     v-card-actions(v-if="!loading")
       v-btn(
         icon,
@@ -51,10 +61,15 @@ import { addFunnel, distinctNames } from "@/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { namespace } from "vuex-class";
+import draggable from "vuedraggable";
 
 const SnackbarStore = namespace("SnackbarStore");
 
-@Component
+@Component({
+  components: {
+    draggable
+  }
+})
 export default class AddFunnel extends Vue {
   @SnackbarStore.Mutation showSnackbar!: (text: string) => void;
 
