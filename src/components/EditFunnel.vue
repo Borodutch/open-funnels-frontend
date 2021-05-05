@@ -1,16 +1,19 @@
 <template lang="pug">
 v-dialog(v-model="dialog", max-width="600", persistent, scrollable)
   template(v-slot:activator="{ on, attrs }")
-    v-list-item(link, v-bind="atts", v-on="on")
-      v-list-item-icon
-        v-icon mdi-filter-plus
-      v-list-item-content
-        v-list-item-title New funnel
+    v-btn(
+      text,
+      color="primary lighten-1",
+      v-bind="atts",
+      v-on="on",
+      :loading="cardLoading",
+      @click="editFunnel"
+    ) Edit
   v-card
     v-toolbar(flat)
       v-btn(icon, @click="closePopup()")
         v-icon mdi-close
-      v-toolbar-title Add funnel
+      v-toolbar-title Edit funnel
     v-card-text.add-funnel-content
       v-progress-linear(v-if="loading", indeterminate)
       template(v-else)
@@ -55,11 +58,13 @@ v-dialog(v-model="dialog", max-width="600", persistent, scrollable)
 </template>
 
 <script lang="ts">
-import { addFunnel, distinctNames } from "@/services/api.service";
+import { distinctNames, updateFunnel } from "@/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { namespace } from "vuex-class";
 import draggable from "vuedraggable";
+import { Prop } from "vue-property-decorator";
+import { Funnel } from "@/interfaces/Funnel.interface";
 
 const SnackbarStore = namespace("SnackbarStore");
 
@@ -68,8 +73,10 @@ const SnackbarStore = namespace("SnackbarStore");
     draggable
   }
 })
-export default class AddFunnel extends Vue {
+export default class EditFunnel extends Vue {
   @SnackbarStore.Mutation showSnackbar!: (text: string) => void;
+  @Prop() cardLoading!: boolean;
+  @Prop() funnel!: Funnel;
 
   dialog = false;
   namesList: string[] = [];
@@ -82,17 +89,20 @@ export default class AddFunnel extends Vue {
 
   async mounted(): Promise<void> {
     this.loading = true;
+    this.funnelName = this.funnel.name;
+    this.funnelDescription = this.funnel.description;
     this.namesList = await distinctNames();
-    this.funnelSteps.push({ name: this.namesList[0] });
+    this.funnel.steps.map((step: string) => {
+      this.funnelSteps.push({ name: step });
+    });
     this.loading = false;
   }
 
   async closePopup(): Promise<void> {
     const confirmed = await this.$confirm(
-      "Do you really want to cancel creation?",
+      "Do you really want to discard unpublished changes?",
       {
-        title: "Cancel creation",
-        buttonTrueColor: "red"
+        title: "Discard changes"
       }
     );
     if (confirmed) {
@@ -121,7 +131,12 @@ export default class AddFunnel extends Vue {
       rawSteps.push(step.name);
     });
     try {
-      await addFunnel(this.funnelName, this.funnelDescription, rawSteps);
+      await updateFunnel({
+        _id: this.funnel._id,
+        name: this.funnelName,
+        description: this.funnelDescription,
+        steps: rawSteps
+      });
       window.location.reload();
     } catch (error) {
       this.showSnackbar(error);

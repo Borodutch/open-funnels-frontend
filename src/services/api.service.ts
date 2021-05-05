@@ -22,6 +22,20 @@ export async function addFunnel(
   });
 }
 
+export async function updateFunnel(funnel: Funnel): Promise<void> {
+  const token: string = store.state.UserStore.token;
+  await ky.patch(`${apiUrl}/funnel/${funnel._id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    json: {
+      name: funnel.name,
+      description: funnel.description,
+      steps: funnel.steps,
+    },
+  });
+}
+
 export async function deleteFunnel(id: string): Promise<void> {
   const token: string = store.state.UserStore.token;
   await ky.delete(`${apiUrl}/funnel`, {

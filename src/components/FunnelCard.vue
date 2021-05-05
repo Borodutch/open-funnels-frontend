@@ -3,9 +3,13 @@ v-card(outlined)
   v-toolbar(color="blue-grey lighten-5", dense, flat)
     v-toolbar-title {{ funnelName }}
     v-spacer
+    EditFunnel(
+      :cardLoading="loading",
+      :funnel="{ _id: id, name, description, steps }"
+    )
     v-btn(
       icon,
-      color="red lighten-3",
+      color="red lighten-1",
       :loading="loading",
       @click="removeFunnel"
     )
@@ -58,12 +62,14 @@ import {
 } from "@/services/api.service";
 import moment from "moment";
 import { namespace } from "vuex-class";
+import EditFunnel from "@/components/EditFunnel.vue";
 
 const SnackbarStore = namespace("SnackbarStore");
 
 @Component({
   components: {
-    LineChart
+    LineChart,
+    EditFunnel
   }
 })
 export default class FunnelCard extends Vue {

@@ -1,31 +1,33 @@
 <template lang="pug">
 .d-flex.justify-center.pt-10
-  v-card(style="min-width: 300px", flat, dark, color="blue-grey")
+  v-card(style="min-width: 300px")
     v-card-title Open funnels dashboard
-    v-card-subtitle(v-if="error") {{ error }}
-    v-progress-linear(v-if="loading", indeterminate)
-    v-card-text(v-else)
-      v-text-field.pt-5(
-        outlined,
-        v-model="inputLogin",
-        label="Username",
-        prepend-inner-icon="mdi-account"
-      )
-      v-text-field(
-        outlined,
-        v-model="inputPassword",
-        type="password",
-        label="Password",
-        prepend-inner-icon="mdi-lock"
-      )
-    v-card-actions
-      v-btn(
-        large,
-        depressed,
-        block,
-        @click="login",
-        :disabled="!inputPassword || !inputLogin"
-      ) Login
+    v-card-text
+      v-progress-linear(v-if="loading", indeterminate)
+      tempalte(v-else)
+        div(style="text-align: center")
+          img(src="@/assets/logo.png")
+        v-text-field.pt-5(
+          outlined,
+          v-model="inputLogin",
+          label="Username",
+          prepend-inner-icon="mdi-account"
+        )
+        v-text-field(
+          outlined,
+          v-model="inputPassword",
+          type="password",
+          label="Password",
+          prepend-inner-icon="mdi-lock"
+        )
+        v-btn(
+          large,
+          color="primary",
+          depressed,
+          block,
+          @click="login",
+          :disabled="!inputPassword || !inputLogin"
+        ) Login
 </template>
 
 <script lang="ts">
@@ -47,7 +49,6 @@ export default class Login extends Vue {
   inputLogin = "";
   inputPassword = "";
   loading = false;
-  error = "";
 
   async login(): Promise<void> {
     try {
