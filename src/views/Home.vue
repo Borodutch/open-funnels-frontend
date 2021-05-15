@@ -17,7 +17,8 @@ section
         v-else,
         v-for="funnel in filteredFunnels",
         :key="funnel.name",
-        cols="6"
+        cols="12",
+        md="6"
       )
         FunnelCard(
           :id="funnel._id",

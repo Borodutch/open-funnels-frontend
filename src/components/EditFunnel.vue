@@ -6,8 +6,7 @@ v-dialog(v-model="dialog", max-width="600", persistent, scrollable)
       color="primary lighten-1",
       v-bind="atts",
       v-on="on",
-      :loading="cardLoading",
-      @click="editFunnel"
+      :loading="cardLoading"
     ) Edit
   v-card
     v-toolbar(flat)

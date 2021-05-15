@@ -1,5 +1,5 @@
 <template lang="pug">
-v-navigation-drawer(app, permanent, dark, tag="aside", color="blue-grey")
+v-navigation-drawer(app, dark, tag="aside", color="blue-grey")
   v-list-item
     v-list-item-content
       v-list-item-title.title Open funnels

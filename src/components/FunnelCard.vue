@@ -19,16 +19,17 @@ v-card(outlined)
     v-skeleton-loader(v-if="loading", type="card-heading, image")
     section(v-else)
       v-row
-        v-col(cols=6)
+        v-col(cols=12, md=6)
           v-select(
             filled,
             :items="listPlatforms",
             label="Platform",
             @change="updateMeta",
             prepend-inner-icon="mdi-cellphone-link",
-            v-model="currentPlatform"
+            v-model="currentPlatform",
+            hide-details
           )
-        v-col(cols=6)
+        v-col(cols=12, md=6)
           v-menu(
             ref="menu",
             v-model="menu",
@@ -36,6 +37,7 @@ v-card(outlined)
             :return-value.sync="dates",
             transition="scale-transition",
             offset-y,
+            left,
             min-width="auto"
           )
             template(v-slot:activator="{ on, attrs }")
@@ -95,7 +97,8 @@ export default class FunnelCard extends Vue {
     ];
     this.loading = true;
     this.listPlatforms = await distinctPlatforms();
-    this.currentPlatform = this.listPlatforms[0];
+    this.listPlatforms.push("all");
+    this.currentPlatform = "all";
     this.funnelData = await getMeta(this.id, this.currentPlatform, [
       startOfWeek.format("x"),
       endOfWeek.format("x")
