@@ -17,7 +17,7 @@ v-card(outlined)
   v-card-subtitle {{ funnelDescription }}
   v-card-text(style="text-align: center") 
     v-skeleton-loader(v-if="loading", type="card-heading, image")
-    section(v-else)
+    .section(v-else)
       v-row
         v-col(cols=12, md=6)
           v-select(
@@ -47,11 +47,20 @@ v-card(outlined)
                 label="Date range",
                 prepend-inner-icon="mdi-calendar",
                 readonly,
+                hide-details,
                 v-bind="attrs",
                 v-on="on"
               )
             v-date-picker(v-model="dates", range, no-title, @change="saveDate")
-      LineChart(:data="funnelData", :steps="steps")
+      v-tabs.py-3(centered, v-model="currentTab")
+        v-tab Chart
+        v-tab Text
+      v-tabs-items(v-model="currentTab")
+        v-tab-item
+          LineChart(:data="funnelData", :steps="steps")
+        v-tab-item 
+          .text-left
+            div(v-for="i in steps.length") <b>{{ steps[i - 1] }}:</b> {{ funnelData[i - 1] }}
 </template>
 
 <script lang="ts">
@@ -87,6 +96,7 @@ export default class FunnelCard extends Vue {
   funnelData: number[] = [];
   menu = false;
   dates: string[] = ["", ""];
+  currentTab = null;
 
   async mounted(): Promise<void> {
     const startOfWeek = moment().startOf("week");

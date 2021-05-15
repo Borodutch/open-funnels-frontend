@@ -4,7 +4,7 @@
     v-card-title Open funnels dashboard
     v-card-text
       v-progress-linear(v-if="loading", indeterminate)
-      tempalte(v-else)
+      template(v-else)
         div(style="text-align: center")
           img(src="@/assets/logo.png")
         v-text-field.pt-5(
